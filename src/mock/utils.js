@@ -16,16 +16,15 @@ const detalizedHoursMinutesTo = (dateTo) => dayjs(dateTo).format('HH:mm');
 const detalizedHoursMinutesFrom = (dateFrom) => dayjs(dateFrom).format('HH:mm');
 
 const generateTodayDate = () => {
-  //'2019-07-11T11:22:13.375Z'
-  let localContainer = {};
+  const localContainer = {};
 
-  let days = dayjs().format('D');
-  let months = dayjs().format('MM');
-  let years = dayjs().format('YYYY');
-  let hours = dayjs().format('HH');
-  let minutes = dayjs().format('mm');
-  let seconds = dayjs().format('ss');
-  let milliseconds = getRandomInteger(0, 999);
+  const days = dayjs().format('D');
+  const months = dayjs().format('MM');
+  const years = dayjs().format('YYYY');
+  const hours = dayjs().format('HH');
+  const minutes = dayjs().format('mm');
+  const seconds = dayjs().format('ss');
+  const milliseconds = getRandomInteger(0, 999);
 
   localContainer.today = `${years}-${months}-${days}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
 
@@ -36,11 +35,8 @@ const generateTodayDate = () => {
   localContainer.end = timeToEnd;
 
   return localContainer;
-}
+};
 
 const times = generateTodayDate();
-
-console.log(times);
-
 
 export { getRandomInteger, humanizedDateTo, detalizedDateTo, detalizedDateFrom, detalizedHoursMinutesTo, detalizedHoursMinutesFrom, times };

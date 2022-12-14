@@ -94,29 +94,29 @@ const createOffersByType = () => ({
 
 
 const createOffersByTypeArr = () => {
-  let localOffersByTypeArr = [];
+  const localOffersByTypeArr = [];
   for (let i = 0; i < GLOBAL_INTEGER; i++) {
     const oneArr = createOffersByType();
     localOffersByTypeArr.push(oneArr);
   }
   return localOffersByTypeArr;
-}
+};
 const offersByTypeArr = createOffersByTypeArr();
 
 const getOffersArr = () => {
-  let offersArr = [];
+  const offersArr = [];
 
-  offersByTypeArr.forEach(element => {
+  offersByTypeArr.forEach((element) => {
     if(element.offers === undefined) {
-      offersArr.push(undefined)
+      offersArr.push(undefined);
     } else {
-      const elementId = element.offers.map(item => item.id);
+      const elementId = element.offers.map((item) => item.id);
       offersArr.push(elementId);
     }
   });
 
   return offersArr;
-}
+};
 
 const idOffersArray = getOffersArr();
 
@@ -137,7 +137,7 @@ const createPointIdPlus = () => {
 
   for (let i = 0; i < GLOBAL_INTEGER; i++) {
     const offerObject = offersByTypeArr[i];
-    const idOfferArray = idOffersArray[i]
+    const idOfferArray = idOffersArray[i];
     const nextPoint = createPoint();
     setPoints.push(nextPoint);
     nextPoint.id += i;
