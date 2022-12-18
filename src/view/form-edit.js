@@ -1,11 +1,10 @@
 import { createElement } from '../render.js';
 import dayjs from 'dayjs';
 
-/* HEADER */
-
 const getCurrentId = (point, destinations) => {
   const destinationIds = destinations.map((item) => item.id);
   const currentId = destinationIds.find((item) => item === point.id);
+
   return currentId;
 };
 
@@ -13,7 +12,7 @@ const types = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'S
 
 const renderTypes = (type) => {
   let result = '';
-  types.forEach((item) => {
+  types.map((item) => {
     result +=
      `<div class="event__type-item">
         <input id="event-type-${item.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item.toLowerCase()}" ${type === item.toLowerCase() ? 'checked' : ''}>
@@ -28,14 +27,16 @@ const renderCurrentType = (point, offersDetails) => {
   const offersTypes = offersDetails.map((item) => item.type);
 
   const currentType = offersTypes.find((item) => item === point.type);
+
   return currentType;
 };
 
 const renderNameOptions = (destinations) => {
   let listOptions = '';
-  destinations.forEach((destination) => {
+  destinations.map((destination) => {
     listOptions += `<option value="${destination.name}"></option>`;
   });
+
   return listOptions;
 };
 
@@ -110,11 +111,7 @@ const createFormHeader =
   </header>`
 );
 
-
-/* OFFERS */
-
-
-const renderOffersButtons = (point, offersDetails) => {
+const renderOffers = (point, offersDetails) => {
   const pointTypeOffer = offersDetails.find((detail) => detail.type === point.type);
   let listTypeOffers = '';
   let index = 0;
@@ -142,6 +139,7 @@ const renderOffersButtons = (point, offersDetails) => {
   } else {
     listTypeOffers += '';
   }
+
   return listTypeOffers;
 };
 
@@ -150,14 +148,12 @@ const createSectionOffers = (point, offersDetails) => (
   `<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
-      ${renderOffersButtons(point, offersDetails)}
+      ${renderOffers(point, offersDetails)}
     </div>
   </section>`
 );
 
-/* DESCRIPTIONS */
-
-const renderDestinationDescription = (point, destinations) => {
+const getDestinationDescription = (point, destinations) => {
   const destinationDescriptions = destinations.map((item) => item.description);
   for (let i = 0; i < destinationDescriptions.length; i++) {
     const destinationDescription = destinationDescriptions[i];
@@ -169,7 +165,7 @@ const renderDestinationDescription = (point, destinations) => {
 const createSectionDescriptions = (point, destinations) => (
   `<section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${renderDestinationDescription(point, destinations)}</p>
+    <p class="event__destination-description">${getDestinationDescription(point, destinations)}</p>
   </section>`
 );
 
@@ -194,6 +190,7 @@ export default class FormEdit {
   }
 
   getTemplate() {
+
     return createFormEditTemplate(this.destinations, this.offersDetails, this.point);
   }
 

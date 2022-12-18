@@ -1,8 +1,12 @@
-import { getRandomInteger, times } from './utils.js';
+import { getRandomInteger, generateTodayDate } from './utils.js';
 
 const GLOBAL_INTEGER = 3;
+const PRICE_100 = 100;
+const PRICE_250 = 250;
+const PRICE_500 = 500;
 
-const DESCRIPTIONS = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+const DESCRIPTIONS = [
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   'Cras aliquet varius magna, non porta ligula feugiat eget.',
   'Fusce tristique felis at fermentum pharetra.', 'Aliquam id orci ut lectus varius viverra.',
   'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.', 'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.',
@@ -12,7 +16,8 @@ const DESCRIPTIONS = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
   'In rutrum ac purus sit amet tempus.'
 ];
 
-const PLACES = ['Dubay',
+const PLACES = [
+  'Dubay',
   'Tirane',
   'Chaco',
   'Vienna',
@@ -34,9 +39,6 @@ const VEHICLE_TYPE = [
   'sightseeing',
   'restaurant'
 ];
-
-
-/* destinations */
 
 const createDestination = () => ({
   id: 1,
@@ -62,12 +64,10 @@ const createDestinationIdPlus = () => {
 
 const destinationsArr = createDestinationIdPlus();
 
-/* offers */
-
 const createOffer = () => ({
   id: 1,
   title: 'offer title',
-  price: getRandomInteger(100, 250)
+  price: getRandomInteger(PRICE_100, PRICE_250)
 });
 
 const chooseOffer = () => {
@@ -81,7 +81,7 @@ const chooseOffer = () => {
     nextOffer.id += i;
   }
 
-  if(setOffers.length > 0) {
+  if (setOffers.length > 0) {
     return setOffers;
   }
 
@@ -91,7 +91,6 @@ const createOffersByType = () => ({
   type: VEHICLE_TYPE[getRandomInteger(0, VEHICLE_TYPE.length - 1)],
   offers: chooseOffer()
 });
-
 
 const createOffersByTypeArr = () => {
   const localOffersByTypeArr = [];
@@ -107,8 +106,8 @@ const getOffersArr = () => {
   const offersArr = [];
 
   offersByTypeArr.forEach((element) => {
-    if(element.offers === undefined) {
-      offersArr.push(undefined);
+    if (!element.offers) {
+      offersArr.push('');
     } else {
       const elementId = element.offers.map((item) => item.id);
       offersArr.push(elementId);
@@ -120,12 +119,10 @@ const getOffersArr = () => {
 
 const idOffersArray = getOffersArr();
 
-/* points */
-
 const createPoint = () => ({
-  basePrice: getRandomInteger(100, 500),
-  dateFrom: times.beginning,
-  dateTo: times.end,
+  basePrice: getRandomInteger(PRICE_100, PRICE_500),
+  dateFrom: generateTodayDate().beginning,
+  dateTo: generateTodayDate().end,
   destination: '$Destination.id$',
   id: 1,
   offers: 'offers',

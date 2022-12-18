@@ -1,5 +1,12 @@
 import dayjs from 'dayjs';
 
+const MONTHS_12 = 12;
+const DAYS_28 = 28;
+const HOURS_23 = 23;
+const MINUTES_59 = 59;
+const NORMAL_AMOUNT = 10;
+const NORMAL_LENGTH = 2;
+
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -28,8 +35,13 @@ const generateTodayDate = () => {
 
   localContainer.today = `${years}-${months}-${days}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
 
-  const timefromBeginning = `${Number(years)}-${Number(months) - getRandomInteger(Number(0), Number(months) - Number(1)) < Number(10) ? `0${Number(months) - getRandomInteger(Number(0), Number(months) - Number(1))}` : `${Number(months) - getRandomInteger(Number(0), Number(months) - Number(1))}`}-${Number(days) - getRandomInteger(Number(0), Number(days) - Number(1)) < Number(10) ? `0${Number(days) - getRandomInteger(Number(0), Number(days) - Number(1))}` : `${Number(days) - getRandomInteger(Number(0), Number(days) - Number(1))}`}T${Number(hours) - getRandomInteger(Number(0), Number(hours) - Number(1)) < Number(10) ? `0${Number(hours) - getRandomInteger(Number(0), Number(hours) - Number(1))}` : `${Number(hours) - getRandomInteger(Number(0), Number(hours) - Number(1))}`}:${Number(minutes) - getRandomInteger(Number(0), Number(minutes) - Number(1)) < Number(10) ? `0${Number(minutes) - getRandomInteger(Number(0), Number(minutes) - Number(1))}` : `${Number(minutes) - getRandomInteger(Number(0), Number(minutes) - Number(1))}`}:${seconds}.${Number(milliseconds)}Z`;
-  const timeToEnd = `${Number(years)}-${Number(months) + getRandomInteger(Number(0), Number(12) - Number(months)) < Number(10) ? `0${Number(months) + getRandomInteger(Number(0), Number(12) - Number(months))}` : `${Number(months) + getRandomInteger(Number(0), Number(12) - Number(months))}`}-${Number(days) + getRandomInteger(Number(0), Number(28) - Number(days)) < Number(10) ? `0${Number(days) + getRandomInteger(Number(0), Number(28) - Number(days))}` : `${Number(days) + getRandomInteger(Number(0), Number(28) - Number(days))}`}T${Number(hours) + getRandomInteger(Number(0), Number(23) - Number(hours)) < Number(10) ? `0${Number(hours) + getRandomInteger(Number(0), Number(23) - Number(hours))}` : `${Number(hours) + getRandomInteger(Number(0), Number(23) - Number(hours))}`}:${Number(minutes) + getRandomInteger(Number(0), Number(59) - Number(minutes)) < Number(10) ? `0${Number(minutes) + getRandomInteger(Number(0), Number(59) - Number(minutes))}` : `${Number(minutes) + getRandomInteger(Number(0), Number(59) - Number(minutes))}`}:${seconds}.${Number(milliseconds)}Z`;
+  const decreasedMonth = Number(months) - getRandomInteger(0, Number(months) - 1);
+  const decreasedDay = Number(days) - getRandomInteger(0, Number(days) - 1);
+  const decreasedHour = Number(hours) - getRandomInteger(0, Number(hours) - 1);
+  const decreasedMinute = Number(minutes) - getRandomInteger(0, Number(minutes) - 1);
+
+  const timefromBeginning = `${years}-${String(decreasedMonth).length < NORMAL_LENGTH ? `0${String(decreasedMonth)}` : `${String(decreasedMonth)}`}-${String(decreasedDay).length < NORMAL_LENGTH ? `0${String(decreasedDay)}` : `${String(decreasedDay)}`}T${String(decreasedHour).length < NORMAL_LENGTH ? `0${String(decreasedHour)}` : `${String(decreasedHour)}`}:${String(decreasedMinute).length < NORMAL_LENGTH ? `0${String(decreasedMinute)}` : `${String(decreasedMinute)}`}:${seconds}.${Number(milliseconds)}Z`;
+  const timeToEnd = `${years}-${Number(months) + getRandomInteger(0, MONTHS_12 - Number(months)) < NORMAL_AMOUNT ? `0${Number(months) + getRandomInteger(0, MONTHS_12 - Number(months))}` : `${Number(months) + getRandomInteger(0, MONTHS_12 - Number(months))}`}-${Number(days) + getRandomInteger(0, DAYS_28 - Number(days)) < NORMAL_AMOUNT ? `0${Number(days) + getRandomInteger(0, DAYS_28 - Number(days))}` : `${Number(days) + getRandomInteger(0, DAYS_28 - Number(days))}`}T${Number(hours) + getRandomInteger(0, HOURS_23 - Number(hours)) < NORMAL_AMOUNT ? `0${Number(hours) + getRandomInteger(0, HOURS_23 - Number(hours))}` : `${Number(hours) + getRandomInteger(0, HOURS_23 - Number(hours))}`}:${Number(minutes) + getRandomInteger(0, MINUTES_59 - Number(minutes)) < NORMAL_AMOUNT ? `0${Number(minutes) + getRandomInteger(0, MINUTES_59 - Number(minutes))}` : `${Number(minutes) + getRandomInteger(0, MINUTES_59 - Number(minutes))}`}:${seconds}.${Number(milliseconds)}Z`;
 
   localContainer.beginning = timefromBeginning;
   localContainer.end = timeToEnd;
@@ -37,6 +49,4 @@ const generateTodayDate = () => {
   return localContainer;
 };
 
-const times = generateTodayDate();
-
-export { getRandomInteger, humanizedDateTo, detalizedDateTo, detalizedDateFrom, detalizedHoursMinutesTo, detalizedHoursMinutesFrom, times };
+export { getRandomInteger, humanizedDateTo, detalizedDateTo, detalizedDateFrom, detalizedHoursMinutesTo, detalizedHoursMinutesFrom, generateTodayDate };

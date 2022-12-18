@@ -1,11 +1,11 @@
 import { createElement } from '../render.js';
-import { humanizedDateTo, detalizedHoursMinutesTo} from '../mock/utils.js';
+import { humanizedDateTo, detalizedHoursMinutesTo, detalizedHoursMinutesFrom} from '../mock/utils.js';
 
-const destructionTitlePrice = (offers) => {
+const destinationTitlePrice = (offers) => {
   let listOffers = '';
 
   if (offers && offers.length > 0) {
-    offers.forEach((offer) => {
+    offers.map((offer) => {
       listOffers +=
       `<li class="event__offer">
         <span class="event__offer-title">${offer.title}</span>
@@ -24,18 +24,13 @@ const destructionTitlePrice = (offers) => {
 };
 
 const createTripPointTemplate = (destination, offerDetails, point) => {
-
   const { name } = destination;
-
   const { type, offers } = offerDetails;
-
-  const {basePrice, dateTo, dateFrom} = point;
-
-  const titlePrice = destructionTitlePrice(offers);
-
+  const { basePrice, dateTo, dateFrom } = point;
+  const titlePrice = destinationTitlePrice(offers);
   const toDate = humanizedDateTo(dateTo);
   const toDateHoursMinutes = detalizedHoursMinutesTo(dateTo);
-  const fromDateHoursMinutes = detalizedHoursMinutesTo(dateFrom);
+  const fromDateHoursMinutes = detalizedHoursMinutesFrom(dateFrom);
 
   return (
     `<li class="trip-events__item">
