@@ -1,9 +1,9 @@
 import { getRandomInteger, generateTodayDate } from './utils.js';
 
 const GLOBAL_INTEGER = 3;
-const PRICE_100 = 100;
-const PRICE_250 = 250;
-const PRICE_500 = 500;
+const PRICE_MIN = 100;
+const PRICE_MEDIUM = 250;
+const PRICE_MAX = 500;
 
 const DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -67,7 +67,7 @@ const destinationsArr = createDestinationIdPlus();
 const createOffer = () => ({
   id: 1,
   title: 'offer title',
-  price: getRandomInteger(PRICE_100, PRICE_250)
+  price: getRandomInteger(PRICE_MIN, PRICE_MEDIUM)
 });
 
 const chooseOffer = () => {
@@ -120,7 +120,7 @@ const getOffersArr = () => {
 const idOffersArray = getOffersArr();
 
 const createPoint = () => ({
-  basePrice: getRandomInteger(PRICE_100, PRICE_500),
+  basePrice: getRandomInteger(PRICE_MIN, PRICE_MAX),
   dateFrom: generateTodayDate().beginning,
   dateTo: generateTodayDate().end,
   destination: '$Destination.id$',
