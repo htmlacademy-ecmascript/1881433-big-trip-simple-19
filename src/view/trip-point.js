@@ -64,26 +64,31 @@ const createTripPointTemplate = (destination, offerDetails, point) => {
 
 
 export default class TripPoint {
+  #element = null;
+  #destination = null;
+  #offerDetails = null;
+  #point = null;
 
   constructor(destination, offerDetails, point) {
-    this.destination = destination;
-    this.offerDetails = offerDetails;
-    this.point = point;
+    this.#destination = destination;
+    this.#offerDetails = offerDetails;
+    this.#point = point;
   }
 
-  getTemplate() {
-    return createTripPointTemplate(this.destination, this.offerDetails, this.point);
+
+  get template() {
+    return createTripPointTemplate(this.#destination, this.#offerDetails, this.#point);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

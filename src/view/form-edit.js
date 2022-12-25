@@ -46,7 +46,7 @@ const renderDestinationName = (destinations, point) => {
   for (let i = 0; i < destinationNames.length; i++) {
     const destinationName = destinationNames[i];
 
-    if (getCurrentId(point, destinations)) {return destinationName;}
+    if (getCurrentId(point, destinations) === i + 1) {return destinationName;}
   }
 };
 
@@ -158,7 +158,7 @@ const getDestinationDescription = (point, destinations) => {
   for (let i = 0; i < destinationDescriptions.length; i++) {
     const destinationDescription = destinationDescriptions[i];
 
-    if (getCurrentId(point, destinations)) {return destinationDescription;}
+    if (getCurrentId(point, destinations) === i + 1) {return destinationDescription;}
   }
 };
 
@@ -183,26 +183,33 @@ const createFormEditTemplate = (destinations, offersDetails, point) => (
 
 export default class FormEdit {
 
+  #element = null;
+  #destinations = null;
+  #offersDetails = null;
+  #point = null;
+
   constructor(destinations, offersDetails, point) {
-    this.destinations = destinations;
-    this.offersDetails = offersDetails;
-    this.point = point;
+    this.#destinations = destinations;
+    this.#offersDetails = offersDetails;
+    this.#point = point;
   }
 
-  getTemplate() {
 
-    return createFormEditTemplate(this.destinations, this.offersDetails, this.point);
+  get template() {
+    return createFormEditTemplate(this.#destinations, this.#offersDetails, this.#point);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
+
+
 }
