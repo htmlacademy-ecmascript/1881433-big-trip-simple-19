@@ -1,7 +1,9 @@
 import { destinationsArr } from '../mock/fish-data';
 
 export default class DestinationsModel {
-  destinationsArray = destinationsArr;
+  #destinationsArray = destinationsArr;
 
-  getDestinations = () => this.destinationsArray;
+  get destinations() {
+    return this.#destinationsArray;
+  }
 }

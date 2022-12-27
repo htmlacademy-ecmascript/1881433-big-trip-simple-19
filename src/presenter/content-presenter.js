@@ -1,45 +1,80 @@
-import HeaderFilterButtons from '../view/filters.js';
 import MainTripSortItems from '../view/sorting.js';
 import UserViewContainer from '../view/user-view-container.js';
 import TripPoint from '../view/trip-point.js';
 import FormEdit from '../view/form-edit.js';
 import {render} from '../render.js';
-import { GLOBAL_INTEGER } from '../mock/fish-data.js';
 
 export default class ContentPresenter {
 
-  headerFilterButtons = new HeaderFilterButtons();
-  mainTripSortItems = new MainTripSortItems();
+  #appContainer = null;
+  #destinationsModel = null;
+  #offersTypeModel = null;
+  #pointModel = null;
 
-  userViewContainer = new UserViewContainer();
+  #mainTripSortItems = new MainTripSortItems();
+  #userViewContainer = new UserViewContainer();
 
-  init = (appContainer, destinationsModel, offersTypeModel, pointModel) => {
-    this.appContainer = appContainer;
-    this.appContainer.headerFilterButtons = document.querySelector('.trip-controls__filters');
-    this.appContainer.mainTripSortItems = document.querySelector('.trip-events');
+  #destinations = [];
+  #offersDetails = [];
+  #points = [];
 
-    this.destinationsModel = destinationsModel;
-    this.destinations = [...this.destinationsModel.getDestinations()];
+  constructor({ appContainer, destinationsModel, offersTypeModel, pointModel }) {
+    this.#appContainer = appContainer;
+    this.#destinationsModel = destinationsModel;
+    this.#offersTypeModel = offersTypeModel;
+    this.#pointModel = pointModel;
+  }
 
-    this.offersTypeModel = offersTypeModel;
-    this.offersDetails = [...this.offersTypeModel.getOffersType()];
+  init = () => {
+    this.#destinations = [...this.#destinationsModel.destinations];
+    this.#offersDetails = [...this.#offersTypeModel.offersType];
+    this.#points = [...this.#pointModel.points];
 
-    this.pointModel = pointModel;
-    this.points = [...this.pointModel.getPoints()];
+    render(this.#mainTripSortItems, this.#appContainer);
+    render(this.#userViewContainer, this.#appContainer);
 
-    render(this.headerFilterButtons, this.appContainer.headerFilterButtons);
-    render(this.mainTripSortItems, this.appContainer.mainTripSortItems);
-
-    render(this.userViewContainer, this.appContainer.mainTripSortItems);
-    this.appContainer.userViewContainer = document.querySelector('.trip-events__list');
-
-
-    render(new FormEdit(this.destinations, this.offersDetails, this.points[0]), this.appContainer.userViewContainer);
-
-
-    for (let i = 0; i < GLOBAL_INTEGER; i++) {
-      render(new TripPoint(this.destinations[i], this.offersDetails[i], this.points[i]), this.appContainer.userViewContainer);
+    for (let i = 0; i < this.#points.length; i++) {
+      this.#renderPoint(this.#destinations[i], this.#offersDetails[i], this.#points[i]);
     }
+
+  };
+
+  #renderPoint = (destination, offerDetails, point) => {
+    const pointComponent = new TripPoint(destination, offerDetails, point);
+    const pointEditComponent = new FormEdit(this.#destinations, this.#offersDetails, point);
+
+    const replacePointToForm = () => {
+      this.#userViewContainer.element.replaceChild(pointEditComponent.element, pointComponent.element);
+    };
+
+    const replaceFormToPoint = () => {
+      this.#userViewContainer.element.replaceChild(pointComponent.element, pointEditComponent.element);
+    };
+
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        replaceFormToPoint();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
+    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replacePointToForm();
+      document.addEventListener('keydown', onEscKeyDown);
+    });
+
+    pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replaceFormToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
+
+    pointEditComponent.element.querySelector('.event__save-btn').addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      replaceFormToPoint();
+    });
+
+    render(pointComponent, this.#userViewContainer.element);
 
   };
 

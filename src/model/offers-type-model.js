@@ -1,7 +1,9 @@
 import { offersByTypeArr } from '../mock/fish-data';
 
 export default class OffersTypeModel {
-  offersTypeArray = offersByTypeArr;
+  #offersTypeArray = offersByTypeArr;
 
-  getOffersType = () => this.offersTypeArray;
+  get offersType() {
+    return this.#offersTypeArray;
+  }
 }
