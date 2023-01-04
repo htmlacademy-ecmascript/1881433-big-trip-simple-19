@@ -2,6 +2,7 @@ import MainTripSortItems from '../view/sorting.js';
 import UserViewContainer from '../view/user-view-container.js';
 import TripPoint from '../view/trip-point.js';
 import FormEdit from '../view/form-edit.js';
+import ListEmpty from '../view/list-empty-view.js';
 import {render} from '../render.js';
 
 export default class ContentPresenter {
@@ -13,6 +14,7 @@ export default class ContentPresenter {
 
   #mainTripSortItems = new MainTripSortItems();
   #userViewContainer = new UserViewContainer();
+  #listEmpty = new ListEmpty();
 
   #destinations = [];
   #offersDetails = [];
@@ -33,8 +35,12 @@ export default class ContentPresenter {
     render(this.#mainTripSortItems, this.#appContainer);
     render(this.#userViewContainer, this.#appContainer);
 
-    for (let i = 0; i < this.#points.length; i++) {
-      this.#renderPoint(this.#destinations[i], this.#offersDetails[i], this.#points[i]);
+    if (this.#points.length === 0) {
+      render(this.#listEmpty, this.#userViewContainer.element);
+    } else {
+      for (let i = 0; i < this.#points.length; i++) {
+        this.#renderPoint(this.#destinations[i], this.#offersDetails[i], this.#points[i]);
+      }
     }
 
   };

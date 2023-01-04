@@ -40,13 +40,10 @@ const renderNameOptions = (destinations) => {
   return listOptions;
 };
 
-const renderDestinationName = (destinations, point) => {
-  const destinationNames = destinations.map((item) => item.name);
-
-  for (let i = 0; i < destinationNames.length; i++) {
-    const destinationName = destinationNames[i];
-
-    if (getCurrentId(point, destinations) === i + 1) {return destinationName;}
+const renderDestinationName = (point, destinations) => {
+  for (let i = 0; i < destinations.length; i++) {
+    const destination = destinations[i];
+    if(point.id === destination.id) {return destination.name;}
   }
 };
 
@@ -84,7 +81,7 @@ const createFormHeader =
     </div>
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">${renderCurrentType(point, offersDetails)}</label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${renderDestinationName(destinations, point)}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${renderDestinationName(point, destinations)}" list="destination-list-1">
         <datalist id="destination-list-1">
           ${renderNameOptions(destinations)}
         </datalist>
@@ -154,11 +151,9 @@ const createSectionOffers = (point, offersDetails) => (
 );
 
 const getDestinationDescription = (point, destinations) => {
-  const destinationDescriptions = destinations.map((item) => item.description);
-  for (let i = 0; i < destinationDescriptions.length; i++) {
-    const destinationDescription = destinationDescriptions[i];
-
-    if (getCurrentId(point, destinations) === i + 1) {return destinationDescription;}
+  for (let i = 0; i < destinations.length; i++) {
+    const destination = destinations[i];
+    if(point.id === destination.id) {return destination.description;}
   }
 };
 

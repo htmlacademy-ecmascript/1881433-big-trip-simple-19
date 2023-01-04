@@ -144,7 +144,6 @@ const createPointIdPlus = () => {
   return setPoints;
 };
 
-const setPointsArr = createPointIdPlus();
+const mockPointsArr = createPointIdPlus();
 
-export { destinationsArr, offersByTypeArr, setPointsArr, GLOBAL_INTEGER };
-
+export { destinationsArr, offersByTypeArr, mockPointsArr, GLOBAL_INTEGER };
