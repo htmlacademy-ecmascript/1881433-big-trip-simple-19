@@ -1,4 +1,4 @@
-import { render } from './render.js';
+import {render} from './framework/render.js';
 import ContentPresenter from './presenter/content-presenter.js';
 
 import HeaderFilterButtons from './view/filters.js';

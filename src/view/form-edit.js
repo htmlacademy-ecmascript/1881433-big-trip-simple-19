@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import dayjs from 'dayjs';
 
 const getCurrentId = (point, destinations) => {
@@ -43,7 +43,9 @@ const renderNameOptions = (destinations) => {
 const renderDestinationName = (point, destinations) => {
   for (let i = 0; i < destinations.length; i++) {
     const destination = destinations[i];
-    if(point.id === destination.id) {return destination.name;}
+    if (point.id === destination.id) {
+      return destination.name;
+    }
   }
 };
 
@@ -176,17 +178,22 @@ const createFormEditTemplate = (destinations, offersDetails, point) => (
   </li>`
 );
 
-export default class FormEdit {
+export default class FormEdit extends AbstractView {
 
-  #element = null;
   #destinations = null;
   #offersDetails = null;
   #point = null;
+  #handleFormClickExit = null;
 
-  constructor(destinations, offersDetails, point) {
+  constructor({destinations, offersDetails, point, onFormClickExit}) {
+    super();
     this.#destinations = destinations;
     this.#offersDetails = offersDetails;
     this.#point = point;
+    this.#handleFormClickExit = onFormClickExit;
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#formClickExitHandler);
   }
 
 
@@ -194,17 +201,9 @@ export default class FormEdit {
     return createFormEditTemplate(this.#destinations, this.#offersDetails, this.#point);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
-
+  #formClickExitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormClickExit();
+  };
 
 }
