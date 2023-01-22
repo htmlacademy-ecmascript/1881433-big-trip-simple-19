@@ -39,14 +39,23 @@ export default class ContentPresenter {
       render(this.#listEmpty, this.#userViewContainer.element);
     } else {
       for (let i = 0; i < this.#points.length; i++) {
-        this.#renderPoint(this.#destinations[i], this.#offersDetails[i], this.#points[i], this.#destinations, this.#offersDetails);
+        this.#renderPoint({
+          destination: this.#destinations[i],
+          offerDetails: this.#offersDetails[i],
+          point: this.#points[i],
+          destinations: this.#destinations,
+          offersDetails: this.#offersDetails
+        });
       }
     }
-
   };
 
-  #renderPoint (destination, offerDetails, point, destinations, offersDetails){
-
+  #renderPoint ({
+    destination,
+    offerDetails,
+    point,
+    destinations,
+    offersDetails}){
     const onEscKeyDown = (evt) => {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
@@ -69,7 +78,7 @@ export default class ContentPresenter {
       destinations,
       offersDetails,
       point,
-      onFormClickExit:() =>{
+      onFormClickExit: () =>{
         replaceFormToPoint.call(this);
         document.removeEventListener('keydown', onEscKeyDown);
       }

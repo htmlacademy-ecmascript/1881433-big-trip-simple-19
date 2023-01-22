@@ -1,9 +1,7 @@
-import { destinationsArr } from '../mock/fish-data';
-
 export default class DestinationsModel {
   #destinationsArray = null;
 
-  constructor() {
+  constructor(destinationsArr) {
     this.#destinationsArray = destinationsArr;
   }
 
