@@ -1,9 +1,7 @@
-import { mockPointsArr } from '../mock/fish-data';
-
 export default class PointModel {
   #pointsArray = null;
 
-  constructor() {
+  constructor(mockPointsArr) {
     this.#pointsArray = mockPointsArr;
   }
 

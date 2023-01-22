@@ -1,9 +1,7 @@
-import { offersByTypeArr } from '../mock/fish-data';
-
 export default class OffersTypeModel {
   #offersTypeArray = null;
 
-  constructor() {
+  constructor(offersByTypeArr) {
     this.#offersTypeArray = offersByTypeArr;
   }
 
