@@ -1,17 +1,21 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizedDateTo, detalizedHoursMinutesTo, detalizedHoursMinutesFrom} from '../mock/utils.js';
+import { humanizedDateFrom, detalizedHoursMinutesTo, detalizedHoursMinutesFrom} from '../mock/time-utils.js';
 
-const destinationTitlePrice = (offers) => {
+const destinationTitlePrice = (offers, type, id) => {
   let listOffers = '';
+  id = 1;
 
   if (offers && offers.length > 0) {
     offers.map((offer) => {
+
       listOffers +=
       `<li class="event__offer">
-        <span class="event__offer-title">${offer.title}</span>
+        <span class="event__offer-title">${offer.title} ${type} #${id}</span>
         +€&nbsp;
         <span class="event__offer-price">${offer.price}</span>
       </li>`;
+
+      id++;
     });
   } else {
     listOffers =
@@ -26,16 +30,16 @@ const destinationTitlePrice = (offers) => {
 const createTripPointTemplate = (destination, offerDetails, point) => {
   const { name } = destination;
   const { type, offers } = offerDetails;
-  const { basePrice, dateTo, dateFrom } = point;
-  const titlePrice = destinationTitlePrice(offers);
-  const toDate = humanizedDateTo(dateTo);
+  const { basePrice, dateTo, dateFrom, id } = point;
+  const titlePrice = destinationTitlePrice(offers, type, id);
+  const fromDate = humanizedDateFrom(dateFrom);
   const toDateHoursMinutes = detalizedHoursMinutesTo(dateTo);
   const fromDateHoursMinutes = detalizedHoursMinutesFrom(dateFrom);
 
   return (
     `<li class="trip-events__item">
       <div class="event">
-        <time class="event__date" datetime="2019-03-18">${toDate}</time>
+        <time class="event__date" datetime="2019-03-18">${fromDate}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
