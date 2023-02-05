@@ -1,12 +1,13 @@
 import {render} from '../framework/render.js';
 import MainTripSortItems from '../view/sorting.js';
 import UserViewContainer from '../view/user-view-container.js';
-import TripPoint from '../view/trip-point.js';
-import FormEdit from '../view/form-edit.js';
 import ListEmpty from '../view/list-empty-view.js';
+import PointPresenter from './point-presenter.js';
+import FilterPresenter from './filter-presenter.js';
+import HeaderFiltersContainer from '../view/filters-container-view.js';
 
 export default class ContentPresenter {
-
+  #appHeaderContainer = null;
   #appContainer = null;
   #destinationsModel = null;
   #offersTypeModel = null;
@@ -14,13 +15,21 @@ export default class ContentPresenter {
 
   #mainTripSortItems = new MainTripSortItems();
   #userViewContainer = new UserViewContainer();
+  #headerFiltersContainer = new HeaderFiltersContainer();
   #listEmpty = new ListEmpty();
 
   #destinations = [];
   #offersDetails = [];
   #points = [];
 
-  constructor({ appContainer, destinationsModel, offersTypeModel, pointModel }) {
+  constructor({
+    appHeaderContainer,
+    appContainer,
+    destinationsModel,
+    offersTypeModel,
+    pointModel
+  }) {
+    this.#appHeaderContainer = appHeaderContainer;
     this.#appContainer = appContainer;
     this.#destinationsModel = destinationsModel;
     this.#offersTypeModel = offersTypeModel;
@@ -32,67 +41,45 @@ export default class ContentPresenter {
     this.#offersDetails = [...this.#offersTypeModel.offersType];
     this.#points = [...this.#pointModel.points];
 
+
     render(this.#mainTripSortItems, this.#appContainer);
     render(this.#userViewContainer, this.#appContainer);
+    render(this.#headerFiltersContainer, this.#appHeaderContainer);
 
     if (this.#points.length === 0) {
       render(this.#listEmpty, this.#userViewContainer.element);
     } else {
-      for (let i = 0; i < this.#points.length; i++) {
-        this.#renderPoint({
-          destination: this.#destinations[i],
-          offerDetails: this.#offersDetails[i],
-          point: this.#points[i],
-          destinations: this.#destinations,
-          offersDetails: this.#offersDetails
-        });
-      }
+      this.#filtersInitialize();
+      this.#pointsInitialize();
     }
+
   };
 
-  #renderPoint ({
-    destination,
-    offerDetails,
-    point,
-    destinations,
-    offersDetails}){
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceFormToPoint.call(this);
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    const pointComponent = new TripPoint({
-      destination,
-      offerDetails,
-      point,
-      onEditClick: () => {
-        replacePointToForm.call(this);
-        document.addEventListener('keydown', onEscKeyDown);
-      }
+  #filtersInitialize() {
+    const filterPresenter = new FilterPresenter({
+      points: this.#points,
+      destinations: this.#destinations,
+      offersDetails: this.#offersDetails,
+      appContainer: this.#appContainer,
+      headerFiltersContainer: this.#headerFiltersContainer,
+      userViewContainer: this.#userViewContainer
     });
+    return filterPresenter.init();
+  }
 
-    const pointEditComponent = new FormEdit({
-      destinations,
-      offersDetails,
-      point,
-      onFormClickExit: () =>{
-        replaceFormToPoint.call(this);
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
+  #pointsInitialize() {
+    let i = 0;
+    this.#points.slice().forEach((point) => {
+      const pointPresenter = new PointPresenter({
+        destination: this.#destinations[i],
+        offerDetails: this.#offersDetails[i],
+        destinations: this.#destinations,
+        offersDetails: this.#offersDetails,
+        userViewContainer: this.#userViewContainer
+      });
+      i++;
+      return pointPresenter.init(point);
     });
-
-    function replacePointToForm() {
-      this.#userViewContainer.element.replaceChild(pointEditComponent.element, pointComponent.element);
-    }
-
-    function replaceFormToPoint() {
-      this.#userViewContainer.element.replaceChild(pointComponent.element, pointEditComponent.element);
-    }
-
-    render(pointComponent, this.#userViewContainer.element);
   }
 
 }

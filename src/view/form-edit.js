@@ -125,7 +125,7 @@ const renderOffers = (point, offersDetails) => {
         `<div class="event__offer-selector">
           <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-${index}" type="checkbox" ${checked} name="event-offer-seats">
           <label class="event__offer-label" for="event-offer-seats-${index}">
-            <span class="event__offer-title">${offer.title}</span>
+            <span class="event__offer-title">Offer #${index + 1}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${offer.price}</span>
           </label>

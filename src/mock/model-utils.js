@@ -1,9 +1,10 @@
-import { getRandomInteger, generateTodayDate } from './utils.js';
+import { getRandomInteger, generateTodayDate } from './time-utils.js';
 
 const GLOBAL_INTEGER = 3;
 const PRICE_MIN = 100;
 const PRICE_MEDIUM = 250;
 const PRICE_MAX = 500;
+
 
 const DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -66,7 +67,7 @@ const destinationsArr = createDestinationIdPlus();
 
 const createOffer = () => ({
   id: 1,
-  title: 'offer title',
+  title: 'offer for',
   price: getRandomInteger(PRICE_MIN, PRICE_MEDIUM)
 });
 
