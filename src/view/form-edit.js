@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 
 const getCurrentId = (point, destinations) => {
   const destinationIds = destinations.map((item) => item.id);
-  const currentId = destinationIds.find((item) => item === point.id);
+  const currentId = destinationIds.find((item) => item === point.destination);
 
   return currentId;
 };
@@ -43,7 +43,7 @@ const renderNameOptions = (destinations) => {
 const renderDestinationName = (point, destinations) => {
   for (let i = 0; i < destinations.length; i++) {
     const destination = destinations[i];
-    if (point.id === destination.id) {
+    if (point.destination === destination.id) {
       return destination.name;
     }
   }
@@ -155,7 +155,7 @@ const createSectionOffers = (point, offersDetails) => (
 const getDestinationDescription = (point, destinations) => {
   for (let i = 0; i < destinations.length; i++) {
     const destination = destinations[i];
-    if(point.id === destination.id) {return destination.description;}
+    if(point.destination === destination.id) {return destination.description;}
   }
 };
 
