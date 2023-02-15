@@ -22,6 +22,4 @@ const contentPresenter = new ContentPresenter({
   pointModel
 });
 
-
 contentPresenter.init();
-//filterPresenter.init();

@@ -1,10 +1,14 @@
-import {render} from '../framework/render.js';
+import {render, remove} from '../framework/render.js';
 import MainTripSortItems from '../view/sorting.js';
+import EverythingFilterButton from '../view/everything-btn-wiew.js';
+import FutureFilterButton from '../view/future-btn-view.js';
 import UserViewContainer from '../view/user-view-container.js';
 import ListEmpty from '../view/list-empty-view.js';
 import PointPresenter from './point-presenter.js';
-import FilterPresenter from './filter-presenter.js';
 import HeaderFiltersContainer from '../view/filters-container-view.js';
+import dayjs from 'dayjs';
+
+const today = new Date();
 
 export default class ContentPresenter {
   #appHeaderContainer = null;
@@ -12,15 +16,40 @@ export default class ContentPresenter {
   #destinationsModel = null;
   #offersTypeModel = null;
   #pointModel = null;
+  everythingFilterButton = null;
+  futureFilterButton = null;
 
   #mainTripSortItems = new MainTripSortItems();
   #userViewContainer = new UserViewContainer();
   #headerFiltersContainer = new HeaderFiltersContainer();
   #listEmpty = new ListEmpty();
 
+  #everythingFilterButton = new EverythingFilterButton({
+    onEverythingChange: () => {
+      this.#clearPointsList();
+      this.#clearBoard();
+      this.#restoreBoard();
+      this.#pointsInitialize();
+    }
+  });
+
+  #futureFilterButton = new FutureFilterButton({
+    onFutureChange: () => {
+      this.#clearPointsList();
+      this.#clearBoard();
+      this.#restoreBoard();
+      this.#renderPointsFuture();
+      if (!this.#points.slice().some((point) => Number(dayjs(point.dateFrom)) >= Number(today))) {
+        render(this.#listEmpty, this.#userViewContainer.element);
+      }
+    }
+  });
+
   #destinations = [];
   #offersDetails = [];
   #points = [];
+
+  #pointPresenter = new Map();
 
   constructor({
     appHeaderContainer,
@@ -45,27 +74,33 @@ export default class ContentPresenter {
     render(this.#mainTripSortItems, this.#appContainer);
     render(this.#userViewContainer, this.#appContainer);
     render(this.#headerFiltersContainer, this.#appHeaderContainer);
+    render(this.#everythingFilterButton, this.#headerFiltersContainer.element);
+    render(this.#futureFilterButton, this.#headerFiltersContainer.element);
 
     if (this.#points.length === 0) {
       render(this.#listEmpty, this.#userViewContainer.element);
     } else {
-      this.#filtersInitialize();
       this.#pointsInitialize();
     }
 
   };
 
-  #filtersInitialize() {
-    const filterPresenter = new FilterPresenter({
-      points: this.#points,
-      destinations: this.#destinations,
-      offersDetails: this.#offersDetails,
-      appContainer: this.#appContainer,
-      headerFiltersContainer: this.#headerFiltersContainer,
-      userViewContainer: this.#userViewContainer
-    });
-    return filterPresenter.init();
+  #clearBoard(){
+    remove(this.#userViewContainer);
   }
+
+  #restoreBoard(){
+    render(this.#userViewContainer, this.#appContainer);
+  }
+
+  #clearPointsList() {
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
+  }
+
+  #handleModeChange = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.resetView());
+  };
 
   #pointsInitialize() {
     let i = 0;
@@ -75,11 +110,27 @@ export default class ContentPresenter {
         offerDetails: this.#offersDetails[i],
         destinations: this.#destinations,
         offersDetails: this.#offersDetails,
-        userViewContainer: this.#userViewContainer
+        userViewContainer: this.#userViewContainer,
+        onModeChange: this.#handleModeChange
       });
       i++;
-      return pointPresenter.init(point);
+      pointPresenter.init(point);
+      this.#pointPresenter.set(point.id, pointPresenter);
     });
   }
 
+  #renderPointsFuture() {
+    this.#points.slice().filter((point) => Number(dayjs(point.dateFrom)) >= Number(today)).forEach((point) => {
+      const futurePointsFilter = new PointPresenter({
+        destination: this.#destinations[point.destination - 1],
+        offerDetails: this.#offersDetails[point.destination - 1],
+        destinations: this.#destinations,
+        offersDetails: this.#offersDetails,
+        userViewContainer: this.#userViewContainer,
+        onModeChange: this.#handleModeChange
+      });
+      futurePointsFilter.init(point);
+      this.#pointPresenter.set(point.id, futurePointsFilter);
+    });
+  }
 }

@@ -1,4 +1,5 @@
 import { getRandomInteger, generateTodayDate } from './time-utils.js';
+import {nanoid} from 'nanoid';
 
 const GLOBAL_INTEGER = 3;
 const PRICE_MIN = 100;
@@ -64,6 +65,7 @@ const createDestinationIdPlus = () => {
 };
 
 const destinationsArr = createDestinationIdPlus();
+const destinationIdArr = destinationsArr.map((destination) => destination.id);
 
 const createOffer = () => ({
   id: 1,
@@ -124,8 +126,8 @@ const createPoint = () => ({
   basePrice: getRandomInteger(PRICE_MIN, PRICE_MAX),
   dateFrom: generateTodayDate().beginning,
   dateTo: generateTodayDate().end,
-  destination: '$Destination.id$',
-  id: 1,
+  destination: 'id',
+  id: nanoid(),
   offers: 'offers',
   type: 'type'
 });
@@ -138,7 +140,7 @@ const createPointIdPlus = () => {
     const idOfferArray = idOffersArray[i];
     const nextPoint = createPoint();
     setPoints.push(nextPoint);
-    nextPoint.id += i;
+    nextPoint.destination = destinationIdArr.map((item) => item)[i];
     nextPoint.offers = idOfferArray;
     nextPoint.type = offerObject.type;
   }
